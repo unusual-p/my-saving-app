@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>簡単貯金アプリ</title>
-    
     <link rel="manifest" href="manifest.json">
-    
     <link rel="apple-touch-icon" href="icon-192.png">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="貯金アプリ">
 
     <style>
-        /* アプリっぽい見た目にするための簡単なデザイン */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, sans-serif;
             text-align: center;
             background-color: #f0f2f5;
             margin: 0;
@@ -27,36 +22,74 @@
         }
         .app-container {
             background-color: white;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 40px 20px;
+            border-radius: 30px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 80%;
+            width: 85%;
             max-width: 400px;
         }
-        h1 {
-            color: #333;
-            font-size: 24px;
-        }
-        p {
+        .total-label {
+            font-size: 18px;
             color: #666;
+            margin-bottom: 5px;
+        }
+        .total-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2ecc71; /* 貯金っぽい緑色 */
+            margin-bottom: 30px;
+        }
+        .save-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s;
+        }
+        .save-button:active {
+            transform: scale(0.95); /* 押した時に少し凹む演出 */
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <h1>貯金アプリ</h1>
-        <p>ホーム画面にアイコンが表示されたら成功です！</p>
-        <hr>
-        <p>次はここに「貯金する」ボタンを作っていきましょう。</p>
+        <div class="total-label">現在の貯金額</div>
+        <div class="total-amount">¥<span id="balance">0</span></div>
+        
+        <button class="save-button" onclick="addMoney()">100円貯金する！</button>
     </div>
 
     <script>
-        // PWAのエンジン（サービスワーカー）を登録する
+        // --- 1. データの読み込み ---
+        // スマホのメモリ（LocalStorage）から保存されている金額を取り出す
+        let currentBalance = parseInt(localStorage.getItem('mySavings')) || 0;
+        
+        // 画面に表示する
+        const balanceDisplay = document.getElementById('balance');
+        balanceDisplay.innerText = currentBalance.toLocaleString();
+
+        // --- 2. 貯金するボタンの動き ---
+        function addMoney() {
+            // 金額を100増やす
+            currentBalance += 100;
+            
+            // 画面の表示を更新
+            balanceDisplay.innerText = currentBalance.toLocaleString();
+            
+            // スマホのメモリに保存する
+            localStorage.setItem('mySavings', currentBalance);
+        }
+
+        // PWAサービスワーカーの登録
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(function() {
-                console.log('Service Worker Registered');
-            });
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
