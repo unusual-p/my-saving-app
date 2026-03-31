@@ -2,16 +2,62 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>私のアプリ（仮）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>簡単貯金アプリ</title>
+    
     <link rel="manifest" href="manifest.json">
-    <script>
-     if ('serviceWorker' in navigator) {
-       navigator.serviceWorker.register('sw.js');
-     }
-    </script>
+    
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="貯金アプリ">
+
+    <style>
+        /* アプリっぽい見た目にするための簡単なデザイン */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .app-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        p {
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>こんにちは！</h1>
-    <p>ここが私のWebアプリの入り口です。まずはここから貯金アプリを作っていきます。</p>
+
+    <div class="app-container">
+        <h1>貯金アプリ</h1>
+        <p>ホーム画面にアイコンが表示されたら成功です！</p>
+        <hr>
+        <p>次はここに「貯金する」ボタンを作っていきましょう。</p>
+    </div>
+
+    <script>
+        // PWAのエンジン（サービスワーカー）を登録する
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function() {
+                console.log('Service Worker Registered');
+            });
+        }
+    </script>
 </body>
 </html>
