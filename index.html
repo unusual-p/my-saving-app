@@ -13,7 +13,8 @@
         body {
             font-family: -apple-system, sans-serif;
             text-align: center;
-            background-color: #fdfaf0; /* 画像のクリーム色背景 */
+            /* 背景をさらに薄いクリーム色に設定 */
+            background-color: #fffef2; 
             margin: 0;
             display: flex;
             justify-content: center;
@@ -25,50 +26,64 @@
             background-color: white;
             padding: 40px 20px;
             border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             width: 85%;
             max-width: 400px;
-            position: relative;
         }
-        /* 上部ラベル */
+        
+        /* 上部ラベル：サイズを2倍（約28px）に */
         .main-label {
-            font-size: 14px;
-            margin-bottom: 25px;
-            color: #333333;
-        }
-        /* 金額表示セクション */
-        .amount-line {
-            font-size: 16px;
-            margin-bottom: 35px;
-            color: #333333;
-        }
-        .total-amount {
-            font-size: 42px;
+            font-size: 28px;
             font-weight: bold;
-            color: #000000;
+            line-height: 1.4;
+            margin-bottom: 30px;
         }
 
-        /* 貯金するボタン (画像と同じデザイン) */
+        /* 中部：これまでに / ¥x / 貯金できたよ！ */
+        .amount-section {
+            font-size: 18px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .total-amount {
+            display: block; /* 改行させるため */
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            margin: 10px 0;
+        }
+
+        /* 貯金ボタン：中身を縦並びに */
         .save-button {
-            background-color: #a9d479; /* 画像のくすんだ緑色 */
+            background-color: #a9d479;
             color: #000000;
             border: none;
-            padding: 20px 40px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 20px;
             border-radius: 50px;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.1s;
+            display: flex;
+            flex-direction: column; /* 縦並びにする */
+            align-items: center;
+            justify-content: center;
             box-shadow: 0 4px 10px rgba(169, 212, 121, 0.3);
+            transition: transform 0.1s;
         }
         .save-button:active {
-            transform: scale(0.96); /* 押した時に少し凹む演出 */
+            transform: scale(0.96);
+        }
+        .button-text-small {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        /* ¥500の部分：サイズを2倍（約32px）に */
+        .button-text-large {
+            font-size: 32px;
+            font-weight: bold;
         }
 
-        /* リセットボタン (画像と同じデザイン) */
         .reset-button {
-            background-color: #e6a23c; /* 画像のくすんだオレンジ色 */
+            background-color: #e6a23c;
             color: #000000;
             border: none;
             padding: 10px 25px;
@@ -76,76 +91,44 @@
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
-            width: auto;
-            display: block;
-            margin: 25px auto 0;
-            box-shadow: 0 2px 6px rgba(230, 162, 60, 0.2);
+            margin-top: 30px;
         }
 
-        /* 確認ポップアップ用 (モーダル) */
+        /* ポップアップ用スタイル（前回と同じ） */
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5); /* 半透明の黒背景 */
-            z-index: 1000;
-            display: none; /* 初期は非表示 */
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; display: none;
         }
         .modal-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 1001;
-            text-align: center;
-            width: 280px;
+            background: white; padding: 25px; border-radius: 20px;
+            width: 280px; text-align: center;
         }
-        .modal-title {
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        /* モーダル内ボタン */
-        .modal-button {
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        .modal-button-no {
-            background-color: #999999; /* グレー */
-            color: #ffffff;
-        }
-        .modal-button-yes {
-            background-color: #e6a23c; /* 画像のくすんだオレンジ色 */
-            color: #ffffff;
-        }
+        .modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .modal-button { border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .modal-button-no { background-color: #999999; color: white; }
+        .modal-button-yes { background-color: #e6a23c; color: white; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <div class="main-label">高級ドリンクをやめて 貯金をしよう</div>
+        <div class="main-label">
+            高級ドリンクをやめて<br>貯金をしよう
+        </div>
         
-        <div class="amount-line">
+        <div class="amount-section">
             これまでに
             <span class="total-amount">¥<span id="balance">0</span></span>
             貯金できたよ！
         </div>
         
-        <button class="save-button" onclick="addMoney()">今日も買わなかった ¥500</button>
+        <button class="save-button" onclick="addMoney()">
+            <span class="button-text-small">今日も買わなかった</span>
+            <span class="button-text-large">¥500</span>
+        </button>
         
         <button class="reset-button" onclick="openResetModal()">リセット</button>
     </div>
@@ -161,55 +144,26 @@
     </div>
 
     <script>
-        // --- データ管理 ---
-        // スマホのLocalStorageから保存されている金額を取り出す (画像と同じで0円からスタート)
         let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
-        
-        // 画面に表示する (数値をフォーマット)
         const balanceDisplay = document.getElementById('balance');
         balanceDisplay.innerText = currentBalance.toLocaleString();
-
-        // ポップアップとオーバーレイの要素取得
         const overlay = document.getElementById('overlay');
 
-        // --- 貯金するボタンの動き (+500円) ---
         function addMoney() {
-            // 金額を500増やす
             currentBalance += 500;
-            
-            // 画面の表示を更新
             balanceDisplay.innerText = currentBalance.toLocaleString();
-            
-            // スマホのメモリに保存する
             localStorage.setItem('mySavingAppBalance', currentBalance);
         }
 
-        // --- リセットポップアップを開く ---
-        function openResetModal() {
-            overlay.style.display = 'block';
-        }
-
-        // --- ポップアップを閉じる (いいえ、リセット後) ---
-        function closeModal() {
-            overlay.style.display = 'none';
-        }
-
-        // --- リセット確定 ---
+        function openResetModal() { overlay.style.display = 'block'; }
+        function closeModal() { overlay.style.display = 'none'; }
         function resetBalanceConfirmed() {
-            // 金額を0に戻す
             currentBalance = 0;
-            
-            // 画面の表示を更新
-            balanceDisplay.innerText = currentBalance.toLocaleString();
-            
-            // スマホのメモリを更新
-            localStorage.setItem('mySavingAppBalance', currentBalance);
-            
-            // ポップアップを閉じる
+            balanceDisplay.innerText = '0';
+            localStorage.setItem('mySavingAppBalance', 0);
             closeModal();
         }
 
-        // --- PWAサービスワーカーの登録 ---
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
