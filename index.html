@@ -13,12 +13,13 @@
         body {
             font-family: -apple-system, sans-serif;
             text-align: center;
-            background-color: #f0f2f5;
+            background-color: #fdfaf0; /* 画像のクリーム色背景 */
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #333333;
         }
         .app-container {
             background-color: white;
@@ -27,67 +28,188 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 85%;
             max-width: 400px;
+            position: relative;
         }
-        .total-label {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 5px;
+        /* 上部ラベル */
+        .main-label {
+            font-size: 14px;
+            margin-bottom: 25px;
+            color: #333333;
+        }
+        /* 金額表示セクション */
+        .amount-line {
+            font-size: 16px;
+            margin-bottom: 35px;
+            color: #333333;
         }
         .total-amount {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: bold;
-            color: #2ecc71; /* 貯金っぽい緑色 */
-            margin-bottom: 30px;
+            color: #000000;
         }
+
+        /* 貯金するボタン (画像と同じデザイン) */
         .save-button {
-            background-color: #3498db;
-            color: white;
+            background-color: #a9d479; /* 画像のくすんだ緑色 */
+            color: #000000;
             border: none;
             padding: 20px 40px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
             cursor: pointer;
             width: 100%;
             transition: transform 0.1s;
+            box-shadow: 0 4px 10px rgba(169, 212, 121, 0.3);
         }
         .save-button:active {
-            transform: scale(0.95); /* 押した時に少し凹む演出 */
+            transform: scale(0.96); /* 押した時に少し凹む演出 */
+        }
+
+        /* リセットボタン (画像と同じデザイン) */
+        .reset-button {
+            background-color: #e6a23c; /* 画像のくすんだオレンジ色 */
+            color: #000000;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            width: auto;
+            display: block;
+            margin: 25px auto 0;
+            box-shadow: 0 2px 6px rgba(230, 162, 60, 0.2);
+        }
+
+        /* 確認ポップアップ用 (モーダル) */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5); /* 半透明の黒背景 */
+            z-index: 1000;
+            display: none; /* 初期は非表示 */
+        }
+        .modal-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1001;
+            text-align: center;
+            width: 280px;
+        }
+        .modal-title {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        /* モーダル内ボタン */
+        .modal-button {
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .modal-button-no {
+            background-color: #999999; /* グレー */
+            color: #ffffff;
+        }
+        .modal-button-yes {
+            background-color: #e6a23c; /* 画像のくすんだオレンジ色 */
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <div class="total-label">現在の貯金額</div>
-        <div class="total-amount">¥<span id="balance">0</span></div>
+        <div class="main-label">高級ドリンクをやめて 貯金をしよう</div>
         
-        <button class="save-button" onclick="addMoney()">100円貯金する！</button>
+        <div class="amount-line">
+            これまでに
+            <span class="total-amount">¥<span id="balance">0</span></span>
+            貯金できたよ！
+        </div>
+        
+        <button class="save-button" onclick="addMoney()">今日も買わなかった ¥500</button>
+        
+        <button class="reset-button" onclick="openResetModal()">リセット</button>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="modal-container">
+            <div class="modal-title">本当にリセットしますか？</div>
+            <div class="modal-buttons">
+                <button class="modal-button modal-button-no" onclick="closeModal()">いいえ</button>
+                <button class="modal-button modal-button-yes" onclick="resetBalanceConfirmed()">はい</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // --- 1. データの読み込み ---
-        // スマホのメモリ（LocalStorage）から保存されている金額を取り出す
-        let currentBalance = parseInt(localStorage.getItem('mySavings')) || 0;
+        // --- データ管理 ---
+        // スマホのLocalStorageから保存されている金額を取り出す (画像と同じで0円からスタート)
+        let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
         
-        // 画面に表示する
+        // 画面に表示する (数値をフォーマット)
         const balanceDisplay = document.getElementById('balance');
         balanceDisplay.innerText = currentBalance.toLocaleString();
 
-        // --- 2. 貯金するボタンの動き ---
+        // ポップアップとオーバーレイの要素取得
+        const overlay = document.getElementById('overlay');
+
+        // --- 貯金するボタンの動き (+500円) ---
         function addMoney() {
-            // 金額を100増やす
-            currentBalance += 100;
+            // 金額を500増やす
+            currentBalance += 500;
             
             // 画面の表示を更新
             balanceDisplay.innerText = currentBalance.toLocaleString();
             
             // スマホのメモリに保存する
-            localStorage.setItem('mySavings', currentBalance);
+            localStorage.setItem('mySavingAppBalance', currentBalance);
         }
 
-        // PWAサービスワーカーの登録
+        // --- リセットポップアップを開く ---
+        function openResetModal() {
+            overlay.style.display = 'block';
+        }
+
+        // --- ポップアップを閉じる (いいえ、リセット後) ---
+        function closeModal() {
+            overlay.style.display = 'none';
+        }
+
+        // --- リセット確定 ---
+        function resetBalanceConfirmed() {
+            // 金額を0に戻す
+            currentBalance = 0;
+            
+            // 画面の表示を更新
+            balanceDisplay.innerText = currentBalance.toLocaleString();
+            
+            // スマホのメモリを更新
+            localStorage.setItem('mySavingAppBalance', currentBalance);
+            
+            // ポップアップを閉じる
+            closeModal();
+        }
+
+        // --- PWAサービスワーカーの登録 ---
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
