@@ -10,135 +10,126 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <style>
+        :root {
+            --bg-color: #fffef2;
+            --accent-green: #a9d479;
+            --accent-orange: #e6a23c;
+            --text-color: #333333;
+        }
+
         body {
             font-family: -apple-system, sans-serif;
-            text-align: center;
-            /* 背景をさらに薄いクリーム色に設定 */
-            background-color: #fffef2; 
+            background-color: var(--bg-color);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333333;
+            color: var(--text-color);
+            padding-bottom: 80px;
         }
+
+        /* ページ切り替え */
+        .page { display: none; padding: 20px; min-height: 100vh; flex-direction: column; align-items: center; box-sizing: border-box; }
+        .active { display: flex; }
+
+        /* ホーム画面 */
         .app-container {
-            background-color: white;
-            padding: 40px 20px;
-            border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            width: 85%;
-            max-width: 400px;
+            background-color: white; padding: 40px 20px; border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 350px; margin-top: 50px;
+            display: flex; flex-direction: column; align-items: center;
         }
-        
-        /* 上部ラベル：サイズを2倍（約28px）に */
-        .main-label {
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 1.4;
-            margin-bottom: 30px;
-        }
+        .main-label { font-size: 28px; font-weight: bold; line-height: 1.4; margin-bottom: 30px; text-align: center; }
+        .amount-section { font-size: 18px; margin-bottom: 40px; text-align: center; }
+        .total-amount { display: block; font-size: 48px; font-weight: bold; color: #000; margin: 10px 0; }
 
-        /* 中部：これまでに / ¥x / 貯金できたよ！ */
-        .amount-section {
-            font-size: 18px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-        .total-amount {
-            display: block; /* 改行させるため */
-            font-size: 48px;
-            font-weight: bold;
-            color: #000000;
-            margin: 10px 0;
-        }
-
-        /* 貯金ボタン：中身を縦並びに */
         .save-button {
-            background-color: #a9d479;
-            color: #000000;
-            border: none;
-            padding: 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            flex-direction: column; /* 縦並びにする */
-            align-items: center;
-            justify-content: center;
+            background-color: var(--accent-green); border: none; padding: 20px; border-radius: 50px;
+            width: 100%; display: flex; flex-direction: column; align-items: center; cursor: pointer;
             box-shadow: 0 4px 10px rgba(169, 212, 121, 0.3);
-            transition: transform 0.1s;
         }
-        .save-button:active {
-            transform: scale(0.96);
-        }
-        .button-text-small {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        /* ¥500の部分：サイズを2倍（約32px）に */
-        .button-text-large {
-            font-size: 32px;
-            font-weight: bold;
-        }
+        .button-text-small { font-size: 16px; margin-bottom: 5px; }
+        .button-text-large { font-size: 32px; font-weight: bold; }
 
         .reset-button {
-            background-color: #e6a23c;
-            color: #000000;
-            border: none;
-            padding: 10px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 30px;
+            background-color: var(--accent-orange); color: #000; border: none; padding: 10px 25px;
+            font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; margin-top: 35px;
         }
 
-        /* ポップアップ用スタイル（前回と同じ） */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000; display: none;
+        /* 記事一覧 */
+        .article-list { width: 100%; max-width: 500px; text-align: left; }
+        .article-item {
+            background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer;
         }
-        .modal-container {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: white; padding: 25px; border-radius: 20px;
-            width: 280px; text-align: center;
+        .article-title { font-weight: bold; font-size: 17px; margin-bottom: 8px; color: #2c3e50; line-height: 1.4; }
+        .article-preview { font-size: 13px; color: #666; }
+
+        /* 記事詳細 & 規約ページ */
+        .detail-content { background: white; padding: 25px; border-radius: 20px; text-align: left; max-width: 600px; width: 100%; line-height: 1.8; }
+        .back-button { background: none; border: 1px solid #ccc; padding: 8px 15px; border-radius: 20px; margin-bottom: 20px; cursor: pointer; }
+
+        /* 下部ナビ */
+        .nav-menu {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: white; display: flex; justify-content: space-around; align-items: center;
+            border-top: 1px solid #eee; z-index: 2000;
         }
-        .modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        .modal-button { border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .modal-button-no { background-color: #999999; color: white; }
-        .modal-button-yes { background-color: #e6a23c; color: white; }
+        .nav-item { border: none; background: none; font-size: 12px; color: #aaa; cursor: pointer; }
+        .nav-item.active-nav { color: var(--accent-orange); font-weight: bold; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; display: none; }
+        .modal-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 20px; width: 280px; text-align: center;}
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="main-label">
-            高級ドリンクをやめて<br>貯金をしよう
+    <div id="home" class="page active">
+        <div class="app-container">
+            <div class="main-label">高級ドリンクをやめて<br>貯金をしよう</div>
+            <div class="amount-section">これまでに<br><span class="total-amount">¥<span id="balance">0</span></span>貯金できたよ！</div>
+            <button class="save-button" onclick="addMoney()">
+                <span class="button-text-small">今日も買わなかった</span>
+                <span class="button-text-large">¥500</span>
+            </button>
+            <button class="reset-button" onclick="openResetModal()">リセット</button>
         </div>
-        
-        <div class="amount-section">
-            これまでに
-            <span class="total-amount">¥<span id="balance">0</span></span>
-            貯金できたよ！
-        </div>
-        
-        <button class="save-button" onclick="addMoney()">
-            <span class="button-text-small">今日も買わなかった</span>
-            <span class="button-text-large">¥500</span>
-        </button>
-        
-        <button class="reset-button" onclick="openResetModal()">リセット</button>
     </div>
+
+    <div id="tips" class="page">
+        <h2 style="margin-bottom:20px;">貯金術コラム</h2>
+        <div class="article-list" id="article-list"></div>
+        <button style="background:none; border:none; color:#999; text-decoration:underline; margin-top:30px; font-size:12px;" onclick="showPage('privacy')">プライバシーポリシー・お問い合わせ</button>
+    </div>
+
+    <div id="article-detail" class="page">
+        <button class="back-button" onclick="showPage('tips')">← 戻る</button>
+        <div class="detail-content">
+            <h2 id="detail-title" style="font-size:20px; margin-top:0;"></h2>
+            <div id="detail-body" style="white-space: pre-wrap;"></div>
+        </div>
+    </div>
+
+    <div id="privacy" class="page">
+        <button class="back-button" onclick="showPage('tips')">← 戻る</button>
+        <div class="detail-content" style="font-size: 13px;">
+            <h2>プライバシーポリシー</h2>
+            <p>当アプリでは、第三者配信による広告サービス（Googleアドセンス）を利用しています。広告配信事業者は、ユーザーの興味に応じた商品やサービスの広告を表示するため、当サイトや他サイトへのアクセスに関する情報 「Cookie」(氏名、住所、メール アドレス、電話番号は含まれません) を使用することがあります。</p>
+            <p>Cookie（クッキー）を無効にする設定およびGoogleアドセンスに関する詳細は「広告 – ポリシーと規約 – Google」をご覧ください。</p>
+            <hr>
+            <h2>お問い合わせ</h2>
+            <p>本アプリに関するお問い合わせは、以下のメールアドレスまでご連絡ください。</p>
+            <p>Email: kaede01234543210@gmail.com</p>
+        </div>
+    </div>
+
+    <nav class="nav-menu">
+        <button class="nav-item active-nav" id="nav-home" onclick="showPage('home')">🏠<br>ホーム</button>
+        <button class="nav-item" id="nav-tips" onclick="showPage('tips')">📚<br>貯金術</button>
+    </nav>
 
     <div class="overlay" id="overlay">
         <div class="modal-container">
             <div class="modal-title">本当にリセットしますか？</div>
-            <div class="modal-buttons">
-                <button class="modal-button modal-button-no" onclick="closeModal()">いいえ</button>
-                <button class="modal-button modal-button-yes" onclick="resetBalanceConfirmed()">はい</button>
+            <div style="display:flex; justify-content:center; gap:15px; margin-top:20px;">
+                <button style="border:none; padding:12px 25px; border-radius:10px; background:#999; color:white;" onclick="closeModal()">いいえ</button>
+                <button style="border:none; padding:12px 25px; border-radius:10px; background:#e6a23c; color:white;" onclick="resetBalanceConfirmed()">はい</button>
             </div>
         </div>
     </div>
@@ -147,7 +138,50 @@
         let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
         const balanceDisplay = document.getElementById('balance');
         balanceDisplay.innerText = currentBalance.toLocaleString();
-        const overlay = document.getElementById('overlay');
+
+        const articles = [
+            {
+                title: "1. コンビニのラテを「貯金」に変える思考法",
+                preview: "毎日なんとなく買っている500円のドリンク。これを「投資」に変えるだけで...",
+                content: "毎日500円のカフェラテを買う習慣がある人は多いでしょう。しかし、1ヶ月で15,000円、1年で180,000円にもなります。\n\nこのアプリのボタンを押す行為は、ただの記録ではありません。今の自分への「ちょっとした我慢」を、将来の自分への「大きなプレゼント」に変換するスイッチです。まずは『本当に今、このドリンクが必要か？』と自分に問いかける習慣をつけましょう。"
+            },
+            {
+                title: "2. 挫折しない！貯金の目標設定のやり方",
+                preview: "「なんとなく貯金」は必ず挫折します。成功の鍵はワクワクする具体的な...",
+                content: "貯金が続かない最大の理由は、目的が曖昧だからです。\n\n人は「我慢」だけでは長く走れません。例えば『10万円貯まったらあの高級レストランに行く』や『最新のスマホを現金で買う』など、具体的でワクワクする目標を設定してください。日々の節約が「目標への一歩」に変わります。"
+            },
+            {
+                title: "3. 「先取り貯金」の魔力：給料日に勝負を決める",
+                preview: "お金が余ったら貯金しよう、という考え方では一生貯まりません。",
+                content: "貯金が上手な人が必ずやっているのが「先取り貯金」です。給料が入った瞬間に、貯金分を別の口座に移すか、このアプリで宣言した金額を「ないもの」として扱います。\n\n「残ったお金で生活する」というルールを自分に課すことで、脳が自動的にその範囲内で工夫を始めます。このアプリのボタンを押し、架空の貯金箱にお金が入ったと意識するだけでも、その後の支出に対する警戒心が高まります。"
+            },
+            {
+                title: "4. 魔法の「24時間ルール」で衝動買いをゼロにする",
+                preview: "魅力的な商品を見たとき、このルールがあなたを救います。",
+                content: "どんなに欲しくても、その場では買わず、必ず24時間置いてから再度判断します。\n\n驚くことに、翌日には『やっぱり無くても大丈夫だな』と思えることが大半です。その浮いたお金で、このアプリのボタンを力強く押しましょう。その瞬間の達成感は、一時的な買い物以上の満足感を与えてくれます。"
+            },
+            {
+                title: "5. 家計の黄金比「50/30/20ルール」",
+                preview: "いくら貯金すればいいか分からない？そんな時はこの世界標準の比率を...",
+                content: "・50%：生活必需品（家賃、食費、光熱費）\n・30%：個人的な楽しみ（趣味、外食、娯楽）\n・20%：貯蓄と返済\n\nこの比率を目指すことで、生活の質を落としすぎずに着実にお金を貯めることができます。自分の支出を振り返り、もし「個人的な楽しみ」が多すぎるなら、その一部をこのアプリを通じた貯金に回してみましょう。"
+            },
+            // --- 追加記事3選 ---
+            {
+                title: "6. ポイ活の罠と賢い活用法",
+                preview: "ポイントを貯めるために無駄遣いしていませんか？本当にお得な活用法を...",
+                content: "「ポイント還元があるから」という理由で、予定になかった買い物をしてしまうのは本末転倒です。本当の節約上手は、必要なものを買う際にポイントを「おまけ」として受け取ります。\n\nこのアプリで500円を浮かせた時、もしその買い物で得られるはずだった数円のポイントを惜しいと感じたら、それは「ポイントに踊らされている」サインかもしれません。現金として手元に残る500円の価値を再認識しましょう。"
+            },
+            {
+                title: "7. 自炊 vs 外食：1ヶ月でどれくらい変わる？",
+                preview: "一食500円の差が、30日積み重なると驚きの金額になります。",
+                content: "外食やコンビニ弁当を自炊に切り替えるだけで、一食あたり500円ほど浮かせることが可能です。これを毎日1回続けるだけで、月間15,000円。年間では18万円の貯金になります。\n\n自炊は面倒に感じるかもしれませんが、最近は時短レシピや便利な調理家電も増えています。まずは週に2、3回から「500円浮かせたボタン」を押すことから始めてみましょう。"
+            },
+            {
+                title: "8. 「見える化」が貯金スピードを加速させる理由",
+                preview: "数字が増えるのを見る快感を味方に。脳の仕組みを利用した貯金術。",
+                content: "脳は「報酬」を求める性質があります。貯金が苦しく感じるのは、報酬（お金が貯まった実感）が遠い未来にあるからです。\n\nこのアプリのように、ボタンを押して即座に数字が増える「見える化」は、脳に小さな達成感（報酬）を与えます。この小さな快感の積み重ねが、習慣化を強力にサポートします。数字が1万円、5万円と増えていくたびに、あなたの節約脳はどんどん強化されていきます。"
+            }
+        ];
 
         function addMoney() {
             currentBalance += 500;
@@ -155,8 +189,33 @@
             localStorage.setItem('mySavingAppBalance', currentBalance);
         }
 
-        function openResetModal() { overlay.style.display = 'block'; }
-        function closeModal() { overlay.style.display = 'none'; }
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            const navId = (pageId === 'home') ? 'nav-home' : 'nav-tips';
+            if(document.getElementById(navId)) document.getElementById(navId).classList.add('active-nav');
+            window.scrollTo(0,0);
+        }
+
+        const listContainer = document.getElementById('article-list');
+        articles.forEach((art, index) => {
+            const div = document.createElement('div');
+            div.className = 'article-item';
+            div.innerHTML = `<div class="article-title">${art.title}</div><div class="article-preview">${art.preview}</div>`;
+            div.onclick = () => showArticle(index);
+            listContainer.appendChild(div);
+        });
+
+        function showArticle(index) {
+            const art = articles[index];
+            document.getElementById('detail-title').innerText = art.title;
+            document.getElementById('detail-body').innerText = art.content;
+            showPage('article-detail');
+        }
+
+        function openResetModal() { document.getElementById('overlay').style.display = 'block'; }
+        function closeModal() { document.getElementById('overlay').style.display = 'none'; }
         function resetBalanceConfirmed() {
             currentBalance = 0;
             balanceDisplay.innerText = '0';
@@ -164,9 +223,7 @@
             closeModal();
         }
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
