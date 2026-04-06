@@ -25,7 +25,6 @@
             padding-bottom: 80px;
         }
 
-        /* ページ切り替え */
         .page { display: none; padding: 20px; min-height: 100vh; flex-direction: column; align-items: center; box-sizing: border-box; }
         .active { display: flex; }
 
@@ -61,7 +60,16 @@
         .article-title { font-weight: bold; font-size: 17px; margin-bottom: 8px; color: #2c3e50; line-height: 1.4; }
         .article-preview { font-size: 13px; color: #666; }
 
-        /* 記事詳細 & 規約ページ */
+        /* PWAガイドのデザイン */
+        .guide-container {
+            background: #fff; padding: 20px; border-radius: 20px; margin-top: 30px;
+            width: 100%; max-width: 500px; text-align: left; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .guide-title { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: var(--accent-orange); border-bottom: 2px solid var(--accent-orange); display: inline-block; }
+        .guide-box { margin-bottom: 15px; font-size: 14px; line-height: 1.6; }
+        .guide-os { font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
+
+        /* 詳細画面 */
         .detail-content { background: white; padding: 25px; border-radius: 20px; text-align: left; max-width: 600px; width: 100%; line-height: 1.8; }
         .back-button { background: none; border: 1px solid #ccc; padding: 8px 15px; border-radius: 20px; margin-bottom: 20px; cursor: pointer; }
 
@@ -95,6 +103,25 @@
     <div id="tips" class="page">
         <h2 style="margin-bottom:20px;">貯金術コラム</h2>
         <div class="article-list" id="article-list"></div>
+
+        <div class="guide-container">
+            <div class="guide-title">📲 ホーム画面に追加してアプリとして使う</div>
+            
+            <div class="guide-box">
+                <span class="guide-os">🍎 iPhone (Safari) の場合</span>
+                1. 下メニュー右の「・・・」内の「共有ボタン（□に↑）」をタップ<br>
+                2. 出てきたメニューを下にスクロール<br>
+                3. 「ホーム画面に追加」を選択
+            </div>
+
+            <div class="guide-box">
+                <span class="guide-os">🤖 Android (Chrome) の場合</span>
+                1. 右上の「設定ボタン（︙）」をタップ<br>
+                2. 「アプリをインストール」または「ホーム画面に追加」を選択
+            </div>
+            <p style="font-size: 12px; color: #888;">※ホーム画面から起動すると、ブラウザの枠が消えてより使いやすくなります。</p>
+        </div>
+
         <button style="background:none; border:none; color:#999; text-decoration:underline; margin-top:30px; font-size:12px;" onclick="showPage('privacy')">プライバシーポリシー・お問い合わせ</button>
     </div>
 
@@ -115,7 +142,7 @@
             <hr>
             <h2>お問い合わせ</h2>
             <p>本アプリに関するお問い合わせは、以下のメールアドレスまでご連絡ください。</p>
-            <p>Email: kaede01234543210@gmail.com</p>
+            <p>Email: [あなたのメールアドレスをここに入力]</p>
         </div>
     </div>
 
@@ -165,7 +192,6 @@
                 preview: "いくら貯金すればいいか分からない？そんな時はこの世界標準の比率を...",
                 content: "・50%：生活必需品（家賃、食費、光熱費）\n・30%：個人的な楽しみ（趣味、外食、娯楽）\n・20%：貯蓄と返済\n\nこの比率を目指すことで、生活の質を落としすぎずに着実にお金を貯めることができます。自分の支出を振り返り、もし「個人的な楽しみ」が多すぎるなら、その一部をこのアプリを通じた貯金に回してみましょう。"
             },
-            // --- 追加記事3選 ---
             {
                 title: "6. ポイ活の罠と賢い活用法",
                 preview: "ポイントを貯めるために無駄遣いしていませんか？本当にお得な活用法を...",
