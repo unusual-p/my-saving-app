@@ -18,6 +18,7 @@
             --bg-color: #fffef2;
             --accent-green: #a9d479;
             --accent-orange: #e6a23c;
+            --accent-red: #c0392b;
             --text-color: #333333;
             --card-bg: #ffffff;
         }
@@ -28,16 +29,15 @@
             margin: 0;
             color: var(--text-color);
             padding-bottom: 80px;
+            overflow-x: hidden;
         }
 
-        /* 共通レイアウト */
         .page { display: none; padding: 20px; min-height: 100vh; flex-direction: column; align-items: center; box-sizing: border-box; }
         .active { display: flex; }
 
-        /* 1. トップ画面 (ポータル) */
+        /* ポータル画面 */
         .portal-header { text-align: center; margin-top: 30px; margin-bottom: 30px; }
         .portal-header h1 { font-size: 24px; color: var(--accent-orange); margin-bottom: 5px; }
-        
         .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; }
         .app-card {
             background: var(--card-bg); padding: 20px; border-radius: 20px; text-align: center;
@@ -47,38 +47,80 @@
         .app-icon { font-size: 40px; margin-bottom: 10px; display: block; }
         .app-name { font-weight: bold; font-size: 14px; }
 
-        /* 1-1. 貯金アプリ画面 */
+        /* コンテナ */
         .app-container {
             background-color: white; padding: 40px 20px; border-radius: 30px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 350px;
             display: flex; flex-direction: column; align-items: center;
+            position: relative;
         }
+
+        /* 貯金アプリ */
         .total-amount { display: block; font-size: 48px; font-weight: bold; color: #000; margin: 10px 0; }
         .save-button {
             background-color: var(--accent-green); border: none; padding: 20px; border-radius: 50px;
             width: 100%; cursor: pointer; box-shadow: 0 4px 10px rgba(169, 212, 121, 0.3);
         }
 
-        /* コラム・ガイド・プライバシー */
-        .detail-content { background: white; padding: 25px; border-radius: 20px; text-align: left; max-width: 600px; width: 100%; line-height: 1.8; }
-        .article-item { 
-            background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); width: 100%; cursor: pointer;
+        /* 愚痴のゴミ箱 */
+        .guchi-area {
+            width: 100%; height: 200px; padding: 15px; border: 1px solid #ddd;
+            border-radius: 15px; font-size: 16px; margin-bottom: 20px;
+            box-sizing: border-box; font-family: inherit; resize: none;
         }
-        .article-title { font-weight: bold; color: #2c3e50; display: block; }
+        .burn-button {
+            background-color: var(--accent-red); color: white; border: none; padding: 15px 30px;
+            border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px;
+        }
 
-        /* 下部ナビ */
+        /* 炎の巨大演出 (1つの巨大な炎) */
+        #fire-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); border-radius: 30px;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; overflow: hidden;
+        }
+        .burning-paper {
+            color: #333; background: #fff; padding: 25px; width: 85%;
+            text-align: center; border-radius: 5px; position: relative;
+            box-shadow: 0 0 20px rgba(255,100,0,0.5);
+            animation: burnAway 4.5s forwards;
+            font-size: 16px; word-wrap: break-word; z-index: 102;
+        }
+        @keyframes burnAway {
+            0% { transform: scale(1); opacity: 1; filter: sepia(0) brightness(1); }
+            40% { filter: sepia(1) brightness(0.6) contrast(1.2); }
+            100% { transform: scale(0.7) translateY(-40px); opacity: 0; filter: brightness(0); }
+        }
+        
+        /* 巨大化した1つの炎 */
+        .fire-emoji-large {
+            position: absolute; font-size: 200px; bottom: -40px;
+            left: 50%; transform: translateX(-50%);
+            filter: drop-shadow(0 0 30px orange);
+            animation: flicker-large 0.6s infinite alternate;
+            pointer-events: none;
+            z-index: 101;
+            width: 100%; text-align: center;
+        }
+
+        @keyframes flicker-large {
+            from { transform: translateX(-50%) translateY(0) scale(1.0); opacity: 0.9; }
+            to { transform: translateX(-50%) translateY(-25px) scale(1.1); opacity: 1; }
+        }
+
+        /* ナビゲーション */
         .nav-menu {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
             background: white; display: flex; justify-content: space-around; align-items: center;
             border-top: 1px solid #eee; z-index: 2000;
         }
-        .nav-item { border: none; background: none; font-size: 11px; color: #aaa; cursor: pointer; }
+        .nav-item { border: none; background: none; font-size: 12px; color: #aaa; cursor: pointer; flex: 1; }
         .nav-item.active-nav { color: var(--accent-orange); font-weight: bold; }
 
-        /* モーダル */
+        .detail-content { background: white; padding: 25px; border-radius: 20px; text-align: left; max-width: 600px; width: 100%; line-height: 1.8; }
+        .article-item { background: white; padding: 15px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; display: none; }
-        .modal-btn { border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -92,6 +134,10 @@
             <div class="app-card" onclick="showPage('saving-app')">
                 <span class="app-icon">☕</span>
                 <span class="app-name">スタバ貯金</span>
+            </div>
+            <div class="app-card" onclick="showPage('guchi-app')">
+                <span class="app-icon">🗑️</span>
+                <span class="app-name">愚痴のゴミ箱</span>
             </div>
             <div class="app-card" style="opacity: 0.6;">
                 <span class="app-icon">🛠️</span>
@@ -121,44 +167,56 @@
         <p style="margin-top:25px; font-size:14px; color:var(--accent-orange); text-decoration:underline; cursor:pointer;" onclick="showPage('tips')">貯金術コラムをチェック →</p>
     </div>
 
+    <div id="guchi-app" class="page">
+        <div class="app-container">
+            <h2 style="font-size:18px; margin-bottom:10px;">愚痴のゴミ箱</h2>
+            <p style="font-size:12px; color:#888; margin-bottom:15px; text-align:center;">嫌なことを書いて燃やしてしまいましょう。<br>内容は一切保存されません。</p>
+            <textarea id="guchi-input" class="guchi-area" placeholder="ここに嫌なことを入力..."></textarea>
+            <button class="burn-button" onclick="startBurning()">燃やしてスッキリする 🔥</button>
+
+            <div id="fire-overlay">
+                <div class="burning-paper" id="burning-paper"></div>
+                <div class="fire-emoji-large">🔥</div>
+            </div>
+        </div>
+        <p style="margin-top:25px; font-size:14px; color:#888; text-decoration:underline; cursor:pointer;" onclick="showPage('portal')">← ホームに戻る</p>
+    </div>
+
     <div id="tips" class="page">
-        <button onclick="showPage('saving-app')" style="background:none; border:1px solid #ccc; border-radius:20px; padding:5px 15px; margin-bottom:20px; cursor:pointer;">← アプリに戻る</button>
-        <h3 style="margin-bottom:20px;">貯金術コラム</h3>
+        <button onclick="showPage('saving-app')" style="background:none; border:1px solid #ccc; border-radius:20px; padding:5px 15px; margin-bottom:20px;">← アプリに戻る</button>
         <div id="article-list" style="width:100%; max-width:500px;"></div>
     </div>
 
     <div id="article-detail" class="page">
-        <button onclick="showPage('tips')" style="background:none; border:1px solid #ccc; border-radius:20px; padding:5px 15px; margin-bottom:20px; cursor:pointer;">← 一覧に戻る</button>
+        <button onclick="showPage('tips')" style="background:none; border:1px solid #ccc; border-radius:20px; padding:5px 15px; margin-bottom:20px;">← 一覧に戻る</button>
         <div class="detail-content">
-            <h2 id="detail-title" style="margin-top:0; font-size:20px;"></h2>
-            <div id="detail-body" style="white-space: pre-wrap; font-size:15px; color:#444;"></div>
+            <h2 id="detail-title"></h2>
+            <div id="detail-body" style="white-space: pre-wrap;"></div>
         </div>
     </div>
 
     <div id="privacy" class="page">
         <div class="detail-content">
             <h2>プライバシーポリシー</h2>
-            <p style="font-size:13px;">当アプリでは、第三者配信による広告サービス（Googleアドセンス）を利用しています。Cookieを使用してユーザーの興味に応じた広告を表示することがあります。</p>
-            <hr>
+            <p style="font-size:13px;">当アプリではGoogleアドセンスを利用しています。</p>
+            <br>
             <h2>お問い合わせ</h2>
-            <p>本アプリに関するお問い合わせは、以下のメールアドレスまでご連絡ください。</p>
-            <p style="font-weight:bold; background:#eee; padding:10px; border-radius:5px;">kaede01234543210@gmail.com</p>
-            <button onclick="showPage('portal')" style="width:100%; padding:12px; margin-top:20px; border-radius:10px; border:none; background:var(--accent-orange); font-weight:bold; cursor:pointer;">ホームに戻る</button>
+            <p>kaede01234543210@gmail.com</p>
+            <button onclick="showPage('portal')" style="width:100%; padding:12px; margin-top:20px; border-radius:10px; border:none; background:var(--accent-orange); color:white; font-weight:bold;">ホームに戻る</button>
         </div>
     </div>
 
     <nav class="nav-menu">
-        <button class="nav-item active-nav" id="nav-portal" onclick="showPage('portal')">📱<br>ホーム</button>
-        <button class="nav-item" id="nav-saving" onclick="showPage('saving-app')">☕<br>貯金</button>
+        <button class="nav-item active-nav" id="nav-portal" onclick="showPage('portal')">🏠<br>ホーム</button>
         <button class="nav-item" id="nav-info" onclick="showPage('privacy')">📄<br>規約</button>
     </nav>
 
-    <div class="overlay" id="overlay">
-        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:30px; border-radius:20px; text-align:center; width:280px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+    <div class="overlay" id="modal-overlay">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:30px; border-radius:20px; text-align:center; width:280px;">
             <p style="font-weight:bold; margin-bottom:25px;">本当にリセットしますか？</p>
             <div style="display:flex; justify-content:center; gap:15px;">
-                <button class="modal-btn" style="background:#eee; color:#666;" onclick="closeModal()">いいえ</button>
-                <button class="modal-btn" style="background:var(--accent-orange); color:white;" onclick="resetBalanceConfirmed()">はい</button>
+                <button onclick="closeModal()" style="border:none; padding:10px 25px; border-radius:10px; background:#eee; cursor:pointer;">いいえ</button>
+                <button onclick="resetBalanceConfirmed()" style="border:none; padding:10px 25px; border-radius:10px; background:var(--accent-orange); color:white; cursor:pointer;">はい</button>
             </div>
         </div>
     </div>
@@ -167,7 +225,7 @@
         // 貯金ロジック
         let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
         const balanceDisplay = document.getElementById('balance');
-        balanceDisplay.innerText = currentBalance.toLocaleString();
+        if(balanceDisplay) balanceDisplay.innerText = currentBalance.toLocaleString();
 
         function addMoney() {
             currentBalance += 500;
@@ -175,39 +233,48 @@
             localStorage.setItem('mySavingAppBalance', currentBalance);
         }
 
+        // 燃やすロジック
+        function startBurning() {
+            const input = document.getElementById('guchi-input');
+            const text = input.value.trim();
+            if (!text) return;
+            const overlay = document.getElementById('fire-overlay');
+            const paper = document.getElementById('burning-paper');
+            paper.innerText = text;
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                input.value = '';
+            }, 4500);
+        }
+
         // ページ切り替え
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.add('active');
-            
-            // ナビのアクティブ状態
+            document.getElementById(pageId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
             if(pageId === 'portal') document.getElementById('nav-portal').classList.add('active-nav');
-            if(pageId === 'saving-app' || pageId === 'tips' || pageId === 'article-detail') document.getElementById('nav-saving').classList.add('active-nav');
             if(pageId === 'privacy') document.getElementById('nav-info').classList.add('active-nav');
-            
             window.scrollTo(0,0);
         }
 
-        // コラムデータ（完全復活 8個）
+        // 貯金術コラムデータ
         const articles = [
-            { title: "1. コンビニのラテを「貯金」に変える思考法", content: "毎日500円のカフェラテを買う習慣がある人は多いでしょう。しかし、1年で18万円にもなります。今の自分への「ちょっとした我慢」を、将来の自分への「大きなプレゼント」に変換しましょう。" },
-            { title: "2. 挫折しない！貯金の目標設定のやり方", content: "目的が曖昧だと貯金は続きません。「10万円貯まったらあのレストランに行く」など、具体的でワクワクする目標を決めましょう。" },
-            { title: "3. 「先取り貯金」の魔力", content: "お金が余ったら貯金しよう、という考え方では一生貯まりません。給料が入った瞬間に、このアプリで宣言した金額を「ないもの」として扱うのが鉄則です。" },
-            { title: "4. 魔法の「24時間ルール」", content: "どんなに欲しくても、その場では買わず24時間置いてから判断します。翌日には「無くても大丈夫」と思えることが大半です。" },
-            { title: "5. 家計の黄金比「50/30/20ルール」", content: "生活費50%、楽しみ30%、貯金20%が世界標準の理想比率です。まずはこのバランスを目指してみましょう。" },
-            { title: "6. ポイ活の罠と賢い活用法", content: "ポイントのために無駄遣いするのは本末転倒。現金として手元に残る500円の価値を再認識しましょう。" },
-            { title: "7. 自炊 vs 外食：1ヶ月の差", content: "外食を自炊に切り替えるだけで、一食500円浮かせることが可能です。月1.5万円の差は大きいです。" },
-            { title: "8. 「見える化」が加速させる理由", content: "脳は即座に数字が増える「報酬」を好みます。アプリで数字が増える快感を味方につけましょう。" }
+            { title: "1. コンビニのラテを「貯金」に変える思考法", content: "毎日なんとなく買っているコンビニのコーヒーやラテ。1杯500円とすると、1ヶ月で15,000円になります。この「なんとなく」を「未来への投資」に変えるだけで、1年後には18万円の資産が生まれます。今日からその500円を、このアプリのボタンに変えてみましょう。" },
+            { title: "2. 挫折しない！貯金の目標設定のやり方", content: "ただ「貯める」だけでは心は折れます。「1万円貯まったら豪華なランチ」「5万円で欲しかったあの服」など、短期的なご褒美を細かく設定しましょう。ワクワクする未来とセットにすることが、継続の最大のコツです。" },
+            { title: "3. 「先取り貯金」の魔力", content: "お金が余ったら貯金しよう、という考えは禁物です。給料が入った時、あるいは一日の始まりに「今日はこの分を貯める」と先に決めてしまうのです。このアプリのボタンを押した瞬間、その500円は最初から無かったものとして生活してみましょう。" },
+            { title: "4. 魔法の「24時間ルール」", content: "衝動買いしそうになったら、一度深呼吸して24時間待ちましょう。翌日になると「意外と必要ないかも」と思えることが大半です。その浮いたお金をアプリに入力する快感は、一時的な買い物よりずっと長く続きます。" },
+            { title: "5. 家計の黄金比「50/30/20ルール」", content: "理想の支出バランスは「生活費50%：自由な楽しみ30%：貯金・投資20%」と言われています。まずはこの比率を意識し、少しずつ自由な楽しみの枠から貯金の枠へとお金をスライドさせていきましょう。" },
+            { title: "6. ポイ活の罠と賢い活用法", content: "ポイントのために無駄な買い物をしていませんか？本当の節約は「現金を手元に残すこと」です。ポイント還元に惑わされず、本当に必要な時だけ買い物をし、浮いた現金500円の価値を大切にしましょう。" },
+            { title: "7. 自炊 vs 外食：1ヶ月の差", content: "ランチを外食から自炊（お弁当）に変えるだけで、一食あたり500円〜800円の節約になります。月に20日続けるだけで最大16,000円。お弁当を作った日は自分を褒めて、このアプリのボタンを力強く押しましょう！" },
+            { title: "8. 「見える化」が加速させる理由", content: "私たちの脳は、数字が積み上がっていく様子を見るのが大好きです。このアプリで増えていく残高は、あなたの「我慢の証」ではなく「自制心の強さの証」です。積み上がった数字を見て、自分を誇らしく思いましょう。" }
         ];
 
-        // 記事リスト生成
         const listContainer = document.getElementById('article-list');
-        articles.forEach((art, index) => {
+        articles.forEach(art => {
             const div = document.createElement('div');
             div.className = 'article-item';
-            div.innerHTML = `<span class="article-title">${art.title}</span>`;
+            div.innerHTML = `<strong>${art.title}</strong>`;
             div.onclick = () => {
                 document.getElementById('detail-title').innerText = art.title;
                 document.getElementById('detail-body').innerText = art.content;
@@ -216,16 +283,14 @@
             listContainer.appendChild(div);
         });
 
-        function openResetModal() { document.getElementById('overlay').style.display = 'block'; }
-        function closeModal() { document.getElementById('overlay').style.display = 'none'; }
+        function openResetModal() { document.getElementById('modal-overlay').style.display = 'block'; }
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
         function resetBalanceConfirmed() {
             currentBalance = 0;
-            balanceDisplay.innerText = '0';
+            if(balanceDisplay) balanceDisplay.innerText = '0';
             localStorage.setItem('mySavingAppBalance', 0);
             closeModal();
         }
-
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
