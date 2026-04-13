@@ -19,6 +19,7 @@
             --accent-green: #a9d479;
             --accent-orange: #e6a23c;
             --accent-red: #c0392b;
+            --accent-blue: #3498db;
             --text-color: #333333;
             --card-bg: #ffffff;
         }
@@ -49,72 +50,50 @@
 
         /* コンテナ */
         .app-container {
-            background-color: white; padding: 40px 20px; border-radius: 30px;
+            background-color: white; padding: 30px 20px; border-radius: 30px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 350px;
             display: flex; flex-direction: column; align-items: center;
             position: relative;
         }
 
-        /* 貯金アプリ */
+        /* 共通ボタン・入力 */
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box;
+        }
+
+        /* カウントダウンアプリ用 */
+        .countdown-list { width: 100%; margin-top: 20px; }
+        .countdown-item {
+            background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;
+        }
+        .cd-info { flex-grow: 1; }
+        .cd-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .cd-days { font-size: 20px; font-weight: bold; color: var(--accent-blue); }
+        .cd-unit { font-size: 12px; margin-left: 2px; }
+        .cd-actions { display: flex; flex-direction: column; gap: 5px; margin-left: 10px; }
+        .btn-small { border: none; padding: 5px 10px; border-radius: 5px; font-size: 10px; cursor: pointer; color: white; }
+        .btn-done { background: var(--accent-green); }
+        .btn-del { background: #ccc; }
+
+        /* 貯金・愚痴アプリ用既存CSS */
         .total-amount { display: block; font-size: 48px; font-weight: bold; color: #000; margin: 10px 0; }
         .save-button {
             background-color: var(--accent-green); border: none; padding: 20px; border-radius: 50px;
             width: 100%; cursor: pointer; box-shadow: 0 4px 10px rgba(169, 212, 121, 0.3);
         }
+        .guchi-area { width: 100%; height: 200px; padding: 15px; border: 1px solid #ddd; border-radius: 15px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; font-family: inherit; resize: none; }
+        .burn-button { background-color: var(--accent-red); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; }
 
-        /* 愚痴のゴミ箱 */
-        .guchi-area {
-            width: 100%; height: 200px; padding: 15px; border: 1px solid #ddd;
-            border-radius: 15px; font-size: 16px; margin-bottom: 20px;
-            box-sizing: border-box; font-family: inherit; resize: none;
-        }
-        .burn-button {
-            background-color: var(--accent-red); color: white; border: none; padding: 15px 30px;
-            border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px;
-        }
-
-        /* 炎の巨大演出 (1つの巨大な炎) */
-        #fire-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); border-radius: 30px;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 100; overflow: hidden;
-        }
-        .burning-paper {
-            color: #333; background: #fff; padding: 25px; width: 85%;
-            text-align: center; border-radius: 5px; position: relative;
-            box-shadow: 0 0 20px rgba(255,100,0,0.5);
-            animation: burnAway 4.5s forwards;
-            font-size: 16px; word-wrap: break-word; z-index: 102;
-        }
-        @keyframes burnAway {
-            0% { transform: scale(1); opacity: 1; filter: sepia(0) brightness(1); }
-            40% { filter: sepia(1) brightness(0.6) contrast(1.2); }
-            100% { transform: scale(0.7) translateY(-40px); opacity: 0; filter: brightness(0); }
-        }
-        
-        /* 巨大化した1つの炎 */
-        .fire-emoji-large {
-            position: absolute; font-size: 200px; bottom: -40px;
-            left: 50%; transform: translateX(-50%);
-            filter: drop-shadow(0 0 30px orange);
-            animation: flicker-large 0.6s infinite alternate;
-            pointer-events: none;
-            z-index: 101;
-            width: 100%; text-align: center;
-        }
-
-        @keyframes flicker-large {
-            from { transform: translateX(-50%) translateY(0) scale(1.0); opacity: 0.9; }
-            to { transform: translateX(-50%) translateY(-25px) scale(1.1); opacity: 1; }
-        }
+        /* 炎の演出 */
+        #fire-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); border-radius: 30px; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; overflow: hidden; }
+        .burning-paper { color: #333; background: #fff; padding: 25px; width: 85%; text-align: center; border-radius: 5px; position: relative; box-shadow: 0 0 20px rgba(255,100,0,0.5); animation: burnAway 4.5s forwards; font-size: 16px; word-wrap: break-word; z-index: 102; }
+        @keyframes burnAway { 0% { transform: scale(1); opacity: 1; filter: sepia(0) brightness(1); } 40% { filter: sepia(1) brightness(0.6) contrast(1.2); } 100% { transform: scale(0.7) translateY(-40px); opacity: 0; filter: brightness(0); } }
+        .fire-emoji-large { position: absolute; font-size: 200px; bottom: -40px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 0 30px orange); animation: flicker-large 0.6s infinite alternate; pointer-events: none; z-index: 101; width: 100%; text-align: center; }
+        @keyframes flicker-large { from { transform: translateX(-50%) translateY(0) scale(1.0); opacity: 0.9; } to { transform: translateX(-50%) translateY(-25px) scale(1.1); opacity: 1; } }
 
         /* ナビゲーション */
-        .nav-menu {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: white; display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid #eee; z-index: 2000;
-        }
+        .nav-menu { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 2000; }
         .nav-item { border: none; background: none; font-size: 12px; color: #aaa; cursor: pointer; flex: 1; }
         .nav-item.active-nav { color: var(--accent-orange); font-weight: bold; }
 
@@ -138,6 +117,10 @@
             <div class="app-card" onclick="showPage('guchi-app')">
                 <span class="app-icon">🗑️</span>
                 <span class="app-name">愚痴のゴミ箱</span>
+            </div>
+            <div class="app-card" onclick="showPage('countdown-app')">
+                <span class="app-icon">⏳</span>
+                <span class="app-name">あと何日？</span>
             </div>
             <div class="app-card" style="opacity: 0.6;">
                 <span class="app-icon">🛠️</span>
@@ -182,6 +165,33 @@
         <p style="margin-top:25px; font-size:14px; color:#888; text-decoration:underline; cursor:pointer;" onclick="showPage('portal')">← ホームに戻る</p>
     </div>
 
+    <div id="countdown-app" class="page">
+        <div class="app-container">
+            <h2 style="font-size:18px; margin-bottom:15px;">あと何日？</h2>
+            
+            <div style="width:100%; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                <label style="font-size:11px;">項目名</label>
+                <input type="text" id="cd-name" placeholder="例：洗濯機洗浄">
+                <label style="font-size:11px;">日付</label>
+                <input type="date" id="cd-date">
+                
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <input type="checkbox" id="cd-repeat" style="width:20px; height:20px;">
+                    <label for="cd-repeat" style="font-size:13px;">繰り返しをONにする</label>
+                </div>
+                <div id="repeat-options" style="display:none;">
+                    <label style="font-size:11px;">繰り返し日数</label>
+                    <input type="number" id="cd-days-input" placeholder="例：90" min="1">
+                </div>
+                
+                <button onclick="addCountdown()" style="background:var(--accent-blue); color:white; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold;">追加する</button>
+            </div>
+
+            <div id="countdown-list" class="countdown-list"></div>
+        </div>
+        <p style="margin-top:25px; font-size:14px; color:#888; text-decoration:underline; cursor:pointer;" onclick="showPage('portal')">← ホームに戻る</p>
+    </div>
+
     <div id="tips" class="page">
         <button onclick="showPage('saving-app')" style="background:none; border:1px solid #ccc; border-radius:20px; padding:5px 15px; margin-bottom:20px;">← アプリに戻る</button>
         <div id="article-list" style="width:100%; max-width:500px;"></div>
@@ -222,33 +232,87 @@
     </div>
 
     <script>
-        // 貯金ロジック
+        // --- 貯金ロジック ---
         let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
         const balanceDisplay = document.getElementById('balance');
         if(balanceDisplay) balanceDisplay.innerText = currentBalance.toLocaleString();
+        function addMoney() { currentBalance += 500; balanceDisplay.innerText = currentBalance.toLocaleString(); localStorage.setItem('mySavingAppBalance', currentBalance); }
 
-        function addMoney() {
-            currentBalance += 500;
-            balanceDisplay.innerText = currentBalance.toLocaleString();
-            localStorage.setItem('mySavingAppBalance', currentBalance);
-        }
-
-        // 燃やすロジック
+        // --- 燃やすロジック ---
         function startBurning() {
             const input = document.getElementById('guchi-input');
             const text = input.value.trim();
             if (!text) return;
             const overlay = document.getElementById('fire-overlay');
             const paper = document.getElementById('burning-paper');
-            paper.innerText = text;
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                input.value = '';
-            }, 4500);
+            paper.innerText = text; overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.display = 'none'; input.value = ''; }, 4500);
         }
 
-        // ページ切り替え
+        // --- カウントダウンロジック ---
+        let countdowns = JSON.parse(localStorage.getItem('myCountdowns')) || [];
+        const repeatCheck = document.getElementById('cd-repeat');
+        const repeatOptions = document.getElementById('repeat-options');
+        repeatCheck.addEventListener('change', () => { repeatOptions.style.display = repeatCheck.checked ? 'block' : 'none'; });
+
+        function addCountdown() {
+            const name = document.getElementById('cd-name').value;
+            const date = document.getElementById('cd-date').value;
+            const isRepeat = document.getElementById('cd-repeat').checked;
+            const repeatDays = parseInt(document.getElementById('cd-days-input').value) || 0;
+            if(!name || !date) return;
+            countdowns.push({ id: Date.now(), name, targetDate: date, isRepeat, repeatDays });
+            saveAndRenderCountdowns();
+            document.getElementById('cd-name').value = '';
+            document.getElementById('cd-date').value = '';
+        }
+
+        function saveAndRenderCountdowns() {
+            localStorage.setItem('myCountdowns', JSON.stringify(countdowns));
+            const list = document.getElementById('countdown-list');
+            list.innerHTML = '';
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            countdowns.sort((a,b) => new Date(a.targetDate) - new Date(b.targetDate)).forEach(cd => {
+                const target = new Date(cd.targetDate);
+                target.setHours(0,0,0,0);
+                const diffTime = target - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                const item = document.createElement('div');
+                item.className = 'countdown-item';
+                item.innerHTML = `
+                    <div class="cd-info">
+                        <div class="cd-title">${cd.name}${cd.isRepeat ? ' 🔄' : ''}</div>
+                        <div class="cd-days">${diffDays <= 0 ? (diffDays === 0 ? '当日' : '期限切れ') : diffDays}<span class="cd-unit">${diffDays > 0 ? '日' : ''}</span></div>
+                    </div>
+                    <div class="cd-actions">
+                        ${cd.isRepeat ? `<button class="btn-small btn-done" onclick="completeCountdown(${cd.id})">完了</button>` : ''}
+                        <button class="btn-small btn-del" onclick="deleteCountdown(${cd.id})">削除</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function completeCountdown(id) {
+            const idx = countdowns.findIndex(c => c.id === id);
+            if(idx !== -1 && countdowns[idx].isRepeat) {
+                const nextDate = new Date(countdowns[idx].targetDate);
+                nextDate.setDate(nextDate.getDate() + countdowns[idx].repeatDays);
+                countdowns[idx].targetDate = nextDate.toISOString().split('T')[0];
+                saveAndRenderCountdowns();
+            }
+        }
+
+        function deleteCountdown(id) {
+            countdowns = countdowns.filter(c => c.id !== id);
+            saveAndRenderCountdowns();
+        }
+        saveAndRenderCountdowns();
+
+        // --- 共通・ページ切り替え ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -258,7 +322,6 @@
             window.scrollTo(0,0);
         }
 
-        // 貯金術コラムデータ
         const articles = [
             { title: "1. コンビニのラテを「貯金」に変える思考法", content: "毎日なんとなく買っているコンビニのコーヒーやラテ。1杯500円とすると、1ヶ月で15,000円になります。この「なんとなく」を「未来への投資」に変えるだけで、1年後には18万円の資産が生まれます。今日からその500円を、このアプリのボタンに変えてみましょう。" },
             { title: "2. 挫折しない！貯金の目標設定のやり方", content: "ただ「貯める」だけでは心は折れます。「1万円貯まったら豪華なランチ」「5万円で欲しかったあの服」など、短期的なご褒美を細かく設定しましょう。ワクワクする未来とセットにすることが、継続の最大のコツです。" },
