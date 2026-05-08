@@ -1,16 +1,64 @@
-<div id="portal" class="page active">
-    <div class="portal-header">
-        <h1>LifeTools</h1>
-        <p>毎日を少し便利にするツール集</p>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J3J0QWZL7V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-J3J0QWZL7V');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="google-site-verification" content="wrKITghBhshB7XZk3WzOMadSMuCvZ5IM6YMOZ7f1THw" />
+    <title>LifeTools - 毎日を便利にするアプリ集</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9924634834401471" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+    <div id="portal" class="page active">
+        <div class="portal-header">
+            <h1>LifeTools</h1>
+            <p>毎日を少し便利にするツール集</p>
+        </div>
+        <div class="app-grid">
+            <div class="app-card" onclick="location.href='/saving/'">
+                <span class="app-icon">☕</span>
+                <span class="app-name">スタバ貯金</span>
+            </div>
+            <div class="app-card" onclick="location.href='/guchi/'">
+                <span class="app-icon">🗑️</span>
+                <span class="app-name">愚痴のゴミ箱</span>
+            </div>
+            <div class="app-card" onclick="location.href='/countdown/'">
+                <span class="app-icon">⏳</span>
+                <span class="app-name">あと何日？</span>
+            </div>
+            <div class="app-card" style="opacity: 0.6;">
+                <span class="app-icon">🛠️</span>
+                <span class="app-name">Coming Soon</span>
+            </div>
+        </div>
+        
+        <div style="margin-top:40px; font-size:12px; color:#999; text-align:center; max-width:320px; line-height:1.6; background:#fff; padding:15px; border-radius:15px;">
+            <strong style="color:var(--accent-orange);">📲 ホーム画面に追加して利用</strong><br>
+            iPhone: 共有ボタン→ホーム画面に追加<br>
+            Android: 設定ボタン（︙）→インストール
+        </div>
     </div>
-    <div class="app-grid">
-        <div class="app-card" onclick="location.href='/saving/'">
-            <span class="app-icon">☕</span>
-            <span class="app-name">スタバ貯金</span>
-        </div>
-        <div class="app-card" onclick="location.href='/guchi/'">
-            <span class="app-icon">🗑️</span>
-            <span class="app-name">愚痴のゴミ箱</span>
-        </div>
-        </div>
-</div>
+
+    <nav class="nav-menu">
+        <button class="nav-item active-nav" onclick="location.href='/'">🏠<br>ホーム</button>
+        <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+    </nav>
+
+</body>
+</html>
