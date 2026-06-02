@@ -1,1 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>あと何日？ - LifeTools</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .app-container {
+            background-color: white; padding: 30px 20px; border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 350px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ddd; 
+            border-radius: 10px; box-sizing: border-box;
+        }
+        .countdown-list { width: 100%; margin-top: 20px; }
+        .countdown-item {
+            background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;
+        }
+        .cd-info { flex-grow: 1; }
+        .cd-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .cd-days { font-size: 20px; font-weight: bold; color: var(--accent-blue); }
+        .cd-unit { font-size: 12px; margin-left: 2px; }
+        .cd-actions { display: flex; flex-direction: column; gap: 5px; margin-left: 10px; }
+        .btn-small { border: none; padding: 5px 10px; border-radius: 5px; font-size: 10px; cursor: pointer; color: white; }
+        .btn-done { background: var(--accent-green); }
+        .btn-del { background: #ccc; }
+    </style>
+</head>
+<body>
 
+    <div class="page active">
+        <div class="app-container">
+            <h2 style="font-size:18px; margin-bottom:15px;">あと何日？</h2>
+            
+            <div style="width:100%; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                <label style="font-size:11px;">項目名</label>
+                <input type="text" id="cd-name" placeholder="例：洗濯機洗浄">
+                <label style="font-size:11px;">日付</label>
+                <input type="date" id="cd-date">
+                
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <input type="checkbox" id="cd-repeat" style="width:20px; height:20px;">
+                    <label for="cd-repeat" style="font-size:13px;">繰り返しをONにする</label>
+                </div>
+                <div id="repeat-options" style="display:none;">
+                    <label style="font-size:11px;">繰り返し日数</label>
+                    <input type="number" id="cd-days-input" placeholder="例：90" min="1">
+                </div>
+                
+                <button onclick="addCountdown()" style="background:var(--accent-blue); color:white; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">追加する</button>
+            </div>
+
+            <div id="countdown-list" class="countdown-list"></div>
+        </div>
+        <div style="height: 100px;"></div>
+    </div>
+
+    <nav class="nav-menu">
+        <button class="nav-item" onclick="location.href='/'">🏠<br>ホーム</button>
+        <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+    </nav>
+
+    <script>
+        let countdowns = JSON.parse(localStorage.getItem('myCountdowns')) || [];
+        const repeatCheck = document.getElementById('cd-repeat');
+        const repeatOptions = document.getElementById('repeat-options');
+        repeatCheck.addEventListener('change', () => { repeatOptions.style.display = repeatCheck.checked ? 'block' : 'none'; });
+
+        function addCountdown() {
+            const name = document.getElementById('cd-name').value;
+            const date = document.getElementById('cd-date').value;
+            const isRepeat = document.getElementById('cd-repeat').checked;
+            const repeatDays = parseInt(document.getElementById('cd-days-input').value) || 0;
+            if(!name || !date) return;
+            countdowns.push({ id: Date.now(), name, targetDate: date, isRepeat, repeatDays });
+            saveAndRenderCountdowns();
+            document.getElementById('cd-name').value = '';
+            document.getElementById('cd-date').value = '';
+        }
+
+        function saveAndRenderCountdowns() {
+            localStorage.setItem('myCountdowns', JSON.stringify(countdowns));
+            const list = document.getElementById('countdown-list');
+            list.innerHTML = '';
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            countdowns.sort((a,b) => new Date(a.targetDate) - new Date(b.targetDate)).forEach(cd => {
+                const target = new Date(cd.targetDate);
+                target.setHours(0,0,0,0);
+                const diffTime = target - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                const item = document.createElement('div');
+                item.className = 'countdown-item';
+                item.innerHTML = `
+                    <div class="cd-info">
+                        <div class="cd-title">${cd.name}${cd.isRepeat ? ' 🔄' : ''}</div>
+                        <div class="cd-days">${diffDays <= 0 ? (diffDays === 0 ? '当日' : '期限切れ') : diffDays}<span class="cd-unit">${diffDays > 0 ? '日' : ''}</span></div>
+                    </div>
+                    <div class="cd-actions">
+                        ${cd.isRepeat ? `<button class="btn-small btn-done" onclick="completeCountdown(${cd.id})">完了</button>` : ''}
+                        <button class="btn-small btn-del" onclick="deleteCountdown(${cd.id})">削除</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function completeCountdown(id) {
+            const idx = countdowns.findIndex(c => c.id === id);
+            if(idx !== -1 && countdowns[idx].isRepeat) {
+                const nextDate = new Date(countdowns[idx].targetDate);
+                nextDate.setDate(nextDate.getDate() + countdowns[idx].repeatDays);
+                countdowns[idx].targetDate = nextDate.toISOString().split('T')[0];
+                saveAndRenderCountdowns();
+            }
+        }
+
+        function deleteCountdown(id) {
+            countdowns = countdowns.filter(c => c.id !== id);
+            saveAndRenderCountdowns();
+        }
+        saveAndRenderCountdowns();
+    </script>
+</body>
+</html>
