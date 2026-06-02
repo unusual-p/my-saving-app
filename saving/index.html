@@ -63,7 +63,7 @@
             <button class="reset-button" onclick="openResetModal()">リセット</button>
         </div>
 
-        <article class="detail-content" style="margin-top: 30px;">
+        <article class="detail-content" style="margin-top: 30px; margin-bottom: 80px;">
             <h2>スタバ貯金で賢く節約</h2>
             <p>毎日何気なく買っているコーヒー代。実はその支出を見直すだけで、大きな貯金に変わります。このアプリは、あなたの節約の達成感を可視化するために作られました。</p>
             <p>ボタンを押すたびに、未来の自分のために500円を積み立てていきましょう。</p>
@@ -72,6 +72,12 @@
             </button>
         </article>
     </div>
+
+    <!-- ホームに戻るナビゲーション -->
+    <nav class="nav-menu">
+        <button class="nav-item active-nav" onclick="location.href='/'">🏠<br>ホーム</button>
+        <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+    </nav>
 
     <script>
         let currentBalance = parseInt(localStorage.getItem('mySavingAppBalance')) || 0;
