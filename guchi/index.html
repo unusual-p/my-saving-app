@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愚痴のゴミ箱 - LifeTools</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .app-container {
+            background-color: white; 
+            padding: 40px 20px; 
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 350px;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            position: relative;
+        }
+        .guchi-area { 
+            width: 100%; height: 200px; padding: 15px; border: 1px solid #ddd; 
+            border-radius: 15px; font-size: 16px; margin-bottom: 20px; 
+            box-sizing: border-box; font-family: inherit; resize: none; 
+        }
+        .burn-button { 
+            background-color: var(--accent-red); color: white; border: none; 
+            padding: 15px 30px; border-radius: 30px; font-weight: bold; 
+            cursor: pointer; width: 100%; font-size: 16px; 
+        }
+        /* 炎の演出 */
+        #fire-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); border-radius: 30px; display: none; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            z-index: 100; overflow: hidden; 
+        }
+        .burning-paper { 
+            color: #333; background: #fff; padding: 25px; width: 85%; 
+            text-align: center; border-radius: 5px; position: relative; 
+            box-shadow: 0 0 20px rgba(255,100,0,0.5); animation: burnAway 4.5s forwards; 
+            font-size: 16px; word-wrap: break-word; z-index: 102; 
+        }
+        @keyframes burnAway { 
+            0% { transform: scale(1); opacity: 1; filter: sepia(0) brightness(1); } 
+            40% { filter: sepia(1) brightness(0.6) contrast(1.2); } 
+            100% { transform: scale(0.7) translateY(-40px); opacity: 0; filter: brightness(0); } 
+        }
+        .fire-emoji-large { 
+            position: absolute; font-size: 200px; bottom: -40px; left: 50%; 
+            transform: translateX(-50%); filter: drop-shadow(0 0 30px orange); 
+            animation: flicker-large 0.6s infinite alternate; pointer-events: none; 
+            z-index: 101; width: 100%; text-align: center; 
+        }
+        @keyframes flicker-large { 
+            from { transform: translateX(-50%) translateY(0) scale(1.0); opacity: 0.9; } 
+            to { transform: translateX(-50%) translateY(-25px) scale(1.1); opacity: 1; } 
+        }
+    </style>
+</head>
+<body>
 
+    <div class="page active">
+        <div class="app-container">
+            <h2 style="font-size: 18px; margin-bottom: 10px;">愚痴のゴミ箱</h2>
+            <p style="font-size: 12px; color: #888; margin-bottom: 15px; text-align: center;">
+                嫌なことを書いて燃やしてしまいましょう。<br>内容は一切保存されません。
+            </p>
+            <textarea id="guchi-input" class="guchi-area" placeholder="ここに嫌なことを入力..."></textarea>
+            <button class="burn-button" onclick="startBurning()">燃やしてスッキリする 🔥</button>
+
+            <div id="fire-overlay">
+                <div class="burning-paper" id="burning-paper"></div>
+                <div class="fire-emoji-large">🔥</div>
+            </div>
+        </div>
+        <div style="height: 100px;"></div>
+    </div>
+
+    <nav class="nav-menu">
+        <button class="nav-item" onclick="location.href='/'">🏠<br>ホーム</button>
+        <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+    </nav>
+
+    <script>
+        function startBurning() {
+            const input = document.getElementById('guchi-input');
+            const text = input.value.trim();
+            if (!text) return;
+            const overlay = document.getElementById('fire-overlay');
+            const paper = document.getElementById('burning-paper');
+            paper.innerText = text; 
+            overlay.style.display = 'flex';
+            setTimeout(() => { 
+                overlay.style.display = 'none'; 
+                input.value = ''; 
+            }, 4500);
+        }
+    </script>
+</body>
+</html>
