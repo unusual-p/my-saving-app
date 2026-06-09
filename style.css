@@ -15,35 +15,14 @@ body {
     color: var(--text-color);
     padding-bottom: 80px;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* 基本構造 */
-.page { display: flex; padding: 20px; min-height: 100vh; flex-direction: column; align-items: center; box-sizing: border-box; }
-
-/* ポータル画面 */
-.portal-header { text-align: center; margin-top: 30px; margin-bottom: 30px; }
-.portal-header h1 { font-size: 24px; color: var(--accent-orange); margin-bottom: 5px; }
-.app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; }
-.app-card {
-    background: var(--card-bg); padding: 20px; border-radius: 20px; text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s;
-}
-.app-card:active { transform: scale(0.95); }
-.app-icon { font-size: 40px; margin-bottom: 10px; display: block; }
-.app-name { font-weight: bold; font-size: 14px; }
-
-/* カウントダウンアプリ用（念のため追加） */
-.countdown-list { width: 100%; margin-top: 20px; }
-.countdown-item {
-    background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 10px;
-    display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;
-}
-.cd-days { font-size: 20px; font-weight: bold; color: var(--accent-blue); }
+.page { padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
 
 /* ナビゲーション */
 .nav-menu { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 2000; }
-.nav-item { border: none; background: none; font-size: 12px; color: #aaa; cursor: pointer; flex: 1; text-decoration: none; text-align: center; }
+.nav-item { border: none; background: none; font-size: 12px; color: #aaa; cursor: pointer; flex: 1; }
 .nav-item.active-nav { color: var(--accent-orange); font-weight: bold; }
-
-/* 記事用（アドセンス対策の解説ページで使います） */
-.detail-content { background: white; padding: 25px; border-radius: 20px; text-align: left; max-width: 600px; width: 100%; line-height: 1.8; margin-top: 20px; }
