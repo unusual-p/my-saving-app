@@ -28,6 +28,10 @@
             padding: 15px 30px; border-radius: 30px; font-weight: bold; 
             cursor: pointer; width: 100%; font-size: 16px; 
         }
+        .app-description {
+            margin-top: 30px; font-size: 14px; color: #666; line-height: 1.8;
+            max-width: 350px; text-align: center;
+        }
         /* 炎の演出 */
         #fire-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -62,10 +66,7 @@
 
     <div class="page active">
         <div class="app-container">
-            <h2 style="font-size: 18px; margin-bottom: 10px;">愚痴のゴミ箱</h2>
-            <p style="font-size: 12px; color: #888; margin-bottom: 15px; text-align: center;">
-                嫌なことを書いて燃やしてしまいましょう。<br>内容は一切保存されません。
-            </p>
+            <h2 style="font-size: 18px; margin-bottom: 20px;">愚痴のゴミ箱</h2>
             <textarea id="guchi-input" class="guchi-area" placeholder="ここに嫌なことを入力..."></textarea>
             <button class="burn-button" onclick="startBurning()">燃やしてスッキリする 🔥</button>
 
@@ -74,6 +75,14 @@
                 <div class="fire-emoji-large">🔥</div>
             </div>
         </div>
+
+        <div class="app-description">
+            <p><strong>心に溜まったモヤモヤを吐き出そう。</strong><br>
+            嫌なことを書き出し、炎の演出とともに燃やしてしまいましょう。<br>
+            入力した内容は一切保存されず、ブラウザを閉じれば完全に消去されます。<br>
+            あなたの心のデトックスとしてご活用ください。</p>
+        </div>
+
         <div style="height: 100px;"></div>
     </div>
 
