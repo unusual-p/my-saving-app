@@ -10,6 +10,8 @@
         .article-item {
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
         }
         .article-item:hover {
             transform: translateY(-2px);
@@ -39,7 +41,18 @@
             <button onclick="location.href='/saving/'" style="width:100%; padding:15px; background:transparent; border:1px solid #ccc; border-radius:10px; margin-top:20px; cursor:pointer;">
                 ← アプリに戻る
             </button>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <a href="/privacy/" style="font-size: 12px; color: #888; text-decoration: underline;">利用規約・プライバシーポリシー</a>
+            </div>
         </div>
+
+        <nav class="nav-menu">
+            <button class="nav-item" onclick="location.href='/'">🏠<br>ホーム</button>
+            <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+        </nav>
+        
+        <div style="height: 80px;"></div>
     </div>
 
 </body>
