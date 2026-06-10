@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポモドーロタイマー - LifeTools</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .timer-display { font-size: 64px; font-weight: bold; margin: 20px 0; color: var(--accent-orange); }
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-time { padding: 15px 20px; border-radius: 15px; border: none; background: #eee; cursor: pointer; }
+        .btn-reset { background: var(--accent-red); color: white; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; }
+        .task-input { width: 100%; max-width: 300px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+    </style>
+</head>
+<body>
 
+    <div class="page">
+        <h2>🍅 ポモドーロタイマー</h2>
+        <input type="text" id="task-name" class="task-input" placeholder="今やるタスク（任意）">
+        
+        <div class="timer-display" id="display">25:00</div>
+        
+        <div class="btn-group">
+            <button class="btn-time" onclick="startTimer(5)">5分</button>
+            <button class="btn-time" onclick="startTimer(15)">15分</button>
+            <button class="btn-time" onclick="startTimer(25)">25分</button>
+        </div>
+        
+        <button class="btn-reset" onclick="resetTimer()">リセット</button>
+
+        <div class="app-description">
+            <p>集中したい時間をタップして開始！<br>終了後は5分間の休憩を挟んで、リズムを作りましょう。</p>
+        </div>
+
+        <nav class="nav-menu">
+            <button class="nav-item" onclick="location.href='/'">🏠<br>ホーム</button>
+            <button class="nav-item" onclick="location.href='/privacy/'">📄<br>規約</button>
+        </nav>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft;
+        const display = document.getElementById('display');
+
+        function startTimer(minutes) {
+            clearInterval(timer);
+            timeLeft = minutes * 60;
+            updateDisplay();
+            timer = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    alert("時間です！休憩しましょう🍅");
+                }
+            }, 1000);
+        }
+
+        function updateDisplay() {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            display.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = 0;
+            display.innerText = "00:00";
+        }
+    </script>
+</body>
+</html>
